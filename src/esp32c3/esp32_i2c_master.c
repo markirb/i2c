@@ -28,11 +28,12 @@
 #include "soc/i2c_reg.h"
 #include "soc/i2c_struct.h"
 
-#define I2C_COMMAND_OP_RSTART (0 << 11)
+#define I2C_COMMAND_OP_RSTART (6 << 11)
 #define I2C_COMMAND_OP_WRITE (1 << 11)
-#define I2C_COMMAND_OP_READ (2 << 11)
-#define I2C_COMMAND_OP_STOP (3 << 11)
+#define I2C_COMMAND_OP_READ (3 << 11)
+#define I2C_COMMAND_OP_STOP (2 << 11)
 #define I2C_COMMAND_OP_END (4 << 11)
+
 #define I2C_COMMAND_ACK_VALUE (1 << 10)
 #define I2C_COMMAND_ACK_EXP (1 << 9)
 #define I2C_COMMAND_ACK_CHECK (1 << 8)
@@ -171,6 +172,7 @@ static void esp32_i2c_write_addr(struct mgos_i2c *c, uint16_t addr, bool read,
   if (addr == MGOS_I2C_ADDR_CONTINUE) return;
   i2c_dev_t *dev = c->dev;
   uint8_t addr_len = 0;
+  dev->ctr.conf_upgate = true;
   dev->fifo_conf.tx_fifo_rst = true;
   dev->fifo_conf.tx_fifo_rst = false;
   dev->command[(*ci)++].val = I2C_COMMAND_OP_RSTART;
